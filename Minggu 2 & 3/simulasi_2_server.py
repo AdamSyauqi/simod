@@ -74,10 +74,18 @@ def simulate_customers(num_customers=20):
             if arrival_time > server_available_time["Badu"]:
                 idle_time["Badu"] += arrival_time - server_available_time["Badu"]
         else: # Both end at the same time
-            server_assigned = "Ali"
-            ali_count += 1
-            if arrival_time > server_available_time["Ali"]:
-                idle_time["Ali"] += arrival_time - server_available_time["Ali"]
+            # Ali finish first
+            if server_available_time["Ali"] <= server_available_time["Badu"]:
+                server_assigned = "Ali"
+                ali_count += 1
+                if arrival_time > server_available_time["Ali"]:
+                    idle_time["Ali"] += arrival_time - server_available_time["Ali"]
+            # Badu finish first
+            elif server_available_time["Badu"] < server_available_time["Ali"]:
+                server_assigned = "Badu"
+                badu_count += 1
+                if arrival_time > server_available_time["Badu"]:
+                    idle_time["Badu"] += arrival_time - server_available_time["Badu"]
 
         service_roll = roll_d100()
         service_time = get_service_time(service_roll, server_assigned)
